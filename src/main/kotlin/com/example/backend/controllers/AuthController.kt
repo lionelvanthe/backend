@@ -1,14 +1,17 @@
 package com.example.backend.controllers
 
-import com.example.backend.models.User
+import com.example.backend.models.*
 import com.example.backend.payload.request.LoginRequest
-import com.example.backend.payload.request.SignupRequest
+import com.example.backend.payload.request.TeacherSignupRequest
 import com.example.backend.payload.response.MessageResponse
 import com.example.backend.payload.response.UserInfoResponse
-import com.example.backend.repository.UserRepository
+import com.example.backend.repository.TeacherRepository
+import com.example.backend.repository.AccountRepository
 import com.example.backend.security.jwt.JwtUtils
 import com.example.backend.security.services.UserDetailsImpl
-import jakarta.validation.Valid
+import com.example.backend.service.user.StudentServiceImp
+import com.example.backend.service.user.TeacherServiceImp
+import com.example.backend.service.user.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
@@ -29,7 +32,13 @@ class AuthController(
         var authenticationManager: AuthenticationManager,
 
         @Autowired
-        var userRepository: UserRepository,
+        var accountRepository: AccountRepository,
+
+        @Autowired
+        var studentService: StudentServiceImp,
+
+        @Autowired
+        var teacherService: TeacherServiceImp,
 
         @Autowired
         var encoder: PasswordEncoder,
@@ -43,7 +52,7 @@ class AuthController(
                 .authenticate(UsernamePasswordAuthenticationToken(loginRequest!!.username, loginRequest.password))
         SecurityContextHolder.getContext().authentication = authentication
         val userDetails = authentication.principal as UserDetailsImpl
-        val jwtCookie = jwtUtils!!.generateJwtCookie(userDetails)
+        val jwtCookie = jwtUtils.generateJwtCookie(userDetails)
         val roles = userDetails.authorities.stream()
                 .map { item: GrantedAuthority? -> item!!.authority }
                 .toList()
@@ -53,29 +62,53 @@ class AuthController(
                         roles[0]))
     }
 
-    @PostMapping("/signup")
-    fun registerUser(@RequestBody signUpRequest: SignupRequest): ResponseEntity<*> {
-        println("vo day")
-        println(signUpRequest.username)
-        println(signUpRequest.password)
-        println(signUpRequest.role)
-        if (userRepository!!.existsByUsername(signUpRequest.username) == true) {
-            return ResponseEntity.badRequest().body(MessageResponse("Error: Username is already taken!"))
+    @PostMapping("/signup/{role}")
+    fun registerUser(@PathVariable role: String, @RequestBody teachSignupRequest: TeacherSignupRequest): ResponseEntity<*> {
+
+        when (role) {
+            "teacher" -> {
+                if (teacherService.existsById(teachSignupRequest.id)) {
+                    return ResponseEntity.badRequest().body(MessageResponse("Error: Username is already taken!"))
+                }
+
+                val account = Account(username = teachSignupRequest.id,
+                        password = encoder.encode("123456"))
+
+                account.role = ERole.ROLE_TEACHER.name
+
+                // Create new user's account
+                val teacher = teachSignupRequest.let {
+                    Teacher(it.id, it.name, it.dayOfBirth, it.gender, it.address, it.email!!, it.phone!!, account)
+                }
+                accountRepository.save(account)
+                teacherService.addUser(teacher)
+            }
+
+            "student" -> {
+                if (studentService.existsById(teachSignupRequest.id)) {
+                    return ResponseEntity.badRequest().body(MessageResponse("Error: Username is already taken!"))
+                }
+
+                val account = Account(username = teachSignupRequest.id,
+                        password = encoder.encode("123456"))
+
+                account.role = ERole.ROLE_STUDENT.name
+
+                // Create new user's account
+                val student = teachSignupRequest.let {
+                    Student(it.id, it.name, it.dayOfBirth, it.gender, it.address, account)
+                }
+                accountRepository.save(account)
+                studentService.addUser(student)
+            }
         }
 
-
-        // Create new user's account
-        val user = User(username = signUpRequest.username,
-                password = encoder!!.encode(signUpRequest.password))
-        val strRole = signUpRequest.role
-        user.role = strRole
-        userRepository!!.save(user)
         return ResponseEntity.ok(MessageResponse("User registered successfully!"))
     }
 
     @PostMapping("/signout")
     fun logoutUser(): ResponseEntity<*> {
-        val cookie = jwtUtils!!.cleanJwtCookie
+        val cookie = jwtUtils.cleanJwtCookie
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(MessageResponse("You've been signed out!"))
     }

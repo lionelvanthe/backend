@@ -2,6 +2,7 @@ package com.example.backend.security
 
 import com.example.backend.security.jwt.AuthEntryPointJwt
 import com.example.backend.security.jwt.AuthTokenFilter
+import com.example.backend.security.jwt.JwtUtils
 import com.example.backend.security.services.UserDetailsServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
@@ -30,14 +31,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 class WebSecurityConfig(
     @Autowired
     var userDetailsService: UserDetailsServiceImpl,
-
     @Autowired
-    private val unauthorizedHandler: AuthEntryPointJwt
-) {
+    private val unauthorizedHandler: AuthEntryPointJwt,
+    @Autowired
+    private val jwtUtils: JwtUtils) {
 
     @Bean
     fun authenticationJwtTokenFilter(): AuthTokenFilter {
-        return AuthTokenFilter()
+        return AuthTokenFilter(jwtUtils, userDetailsService)
     }
 
     @Bean

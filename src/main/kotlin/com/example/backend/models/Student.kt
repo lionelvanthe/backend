@@ -9,23 +9,26 @@ import java.util.*
 @Table(name = "hoc_sinh")
 class Student (
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "idhoc_sinh")
-        private val id: Int? = null,
+        override val id: String,
 
         @Column(name = "ho_ten")
         @NotBlank @Size(max = 255)
-        private val name: String? = null,
+        override val name: String,
 
         @Column(name = "ngay_sinh")
         @NotBlank
-        private val dayOfBirth: Date? = null,
+        override val dayOfBirth: Date,
 
         @Column(name = "gioi_tinh")
         @NotBlank @Size(max = 45)
-        private val gender: String? = null,
+        override val gender: String,
 
-        @Column(name = "dai_chi")
+        @Column(name = "dia_chi")
         @NotBlank @Size(max = 255)
-        private val address: String? = null
-)
+        override val address: String,
+
+        @OneToOne
+        @JoinColumn(name = "user_id")
+        private val account: Account? = null
+): User()

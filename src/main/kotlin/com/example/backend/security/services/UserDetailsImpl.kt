@@ -1,6 +1,6 @@
 package com.example.backend.security.services
 
-import com.example.backend.models.User
+import com.example.backend.models.Account
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -46,13 +46,13 @@ class UserDetailsImpl(val id: Long, private val username: String, @field:JsonIgn
     companion object {
         private const val serialVersionUID = 1L
         @JvmStatic
-        fun build(user: User): UserDetailsImpl {
+        fun build(account: Account): UserDetailsImpl {
             val authorities: MutableList<GrantedAuthority> = ArrayList()
-            authorities.add(SimpleGrantedAuthority(user.role))
+            authorities.add(SimpleGrantedAuthority(account.role))
             return UserDetailsImpl(
-                    user.id.toLong(),
-                    user.username,
-                    user.password,
+                    account.id.toLong(),
+                    account.username,
+                    account.password,
                     authorities)
         }
     }

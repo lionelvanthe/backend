@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.Keys
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Scope
 import org.springframework.http.ResponseCookie
 import org.springframework.stereotype.Component
 import org.springframework.web.util.WebUtils
@@ -14,6 +15,7 @@ import java.security.Key
 import java.util.*
 
 @Component
+@Scope("prototype")
 class JwtUtils {
     @Value("\${bezkoder.app.jwtSecret}")
     private val jwtSecret: String? = null
@@ -25,6 +27,7 @@ class JwtUtils {
     private val jwtCookie: String? = null
     fun getJwtFromCookies(request: HttpServletRequest?): String? {
         val cookie = WebUtils.getCookie(request!!, jwtCookie!!)
+        println("thenv: ${cookie}, ${cookie?.value}")
         return cookie?.value
     }
 

@@ -43,7 +43,4 @@ data class Parent (
         @NotBlank @Size(max = 255)
         private val phoneNumber:  String? = null,
 
-        @OneToOne
-        @JoinColumn(name = "user_id")
-        private val user: User? = null
 )

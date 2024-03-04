@@ -10,43 +10,38 @@ import java.util.*
 @Table(name = "giao_vien")
 class Teacher(
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "idgiao_vien")
-        private val id: Int? = null,
+        override val id: String,
 
         @Column(name = "ho_ten")
         @NotBlank
         @Size(max = 255)
-        private val name: String? = null,
+        override val name: String,
 
         @Column(name = "ngay_sinh")
         @NotBlank
-        private val dayOfBrith: Date? = null,
+        override val dayOfBirth: Date,
 
         @Column(name = "gioi_tinh")
         @NotBlank
         @Size(max = 45)
-        private val gender: String? = null,
+        override val gender: String,
 
-        @Column(name = "dai_chi")
+        @Column(name = "dia_chi")
         @NotBlank
         @Size(max = 255)
-        private val address: String? = null,
+        override val address: String,
 
         @Column(name = "email")
         @NotBlank @Size(max = 255)
         @Email
-        private val email: String? = null,
-
-        @Column(name = "password")
-        @NotBlank @Size(max = 255)
-        private val password: String? = null,
+        val email: String,
 
         @Column(name = "so_dien_thoai")
         @NotBlank @Size(max = 255)
-        private val phoneNumber: String? = null,
+        val phoneNumber: String,
 
         @OneToOne
         @JoinColumn(name = "user_id")
-        private val user: User? = null
-)
+        val account: Account? = null
+): User()

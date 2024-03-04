@@ -1,6 +1,6 @@
 package com.example.backend.security.services
 
-import com.example.backend.repository.UserRepository
+import com.example.backend.repository.AccountRepository
 import com.example.backend.security.services.UserDetailsImpl.Companion.build
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetails
@@ -13,13 +13,13 @@ import java.util.function.Supplier
 @Service
 class UserDetailsServiceImpl(
         @Autowired
-        var userRepository: UserRepository
+        var accountRepository: AccountRepository
 ) : UserDetailsService {
 
     @Transactional
     @Throws(UsernameNotFoundException::class)
     override fun loadUserByUsername(username: String): UserDetails {
-        val user = userRepository!!.findByUsername(username)!!
+        val user = accountRepository.findByUsername(username)!!
                 .orElseThrow(Supplier { UsernameNotFoundException("User Not Found with username: $username") })!!
         return build(user)
     }

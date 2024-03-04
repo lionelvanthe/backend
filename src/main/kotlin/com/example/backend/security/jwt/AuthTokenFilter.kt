@@ -13,20 +13,17 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter
 import java.io.IOException
 
-class AuthTokenFilter: OncePerRequestFilter() {
-
-    @Autowired
-    private val jwtUtils: JwtUtils? = null
-    @Autowired
-    private val userDetailsService: UserDetailsServiceImpl? =null
+class AuthTokenFilter(
+    private val jwtUtils: JwtUtils,
+    private val userDetailsService: UserDetailsServiceImpl): OncePerRequestFilter() {
 
     @Throws(ServletException::class, IOException::class)
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
         try {
             val jwt = parseJwt(request)
-            if (jwt != null && jwtUtils!!.validateJwtToken(jwt)) {
+            if (jwtUtils.validateJwtToken(jwt)) {
                 val username = jwtUtils.getUserNameFromJwtToken(jwt)
-                val userDetails = userDetailsService!!.loadUserByUsername(username)
+                val userDetails = userDetailsService.loadUserByUsername(username)
                 val authentication = UsernamePasswordAuthenticationToken(userDetails,
                         null,
                         userDetails.authorities)
@@ -40,7 +37,7 @@ class AuthTokenFilter: OncePerRequestFilter() {
     }
 
     private fun parseJwt(request: HttpServletRequest): String {
-        return jwtUtils!!.getJwtFromCookies(request)!!
+        return jwtUtils.getJwtFromCookies(request)!!
     }
 
     companion object {

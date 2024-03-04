@@ -1,7 +1,7 @@
 package com.example.backend.models
 
 enum class ERole {
-    ADMIN,
-    PARENT,
-    TEACHER
+    ROLE_ADMIN,
+    ROLE_STUDENT,
+    ROLE_TEACHER
 }
