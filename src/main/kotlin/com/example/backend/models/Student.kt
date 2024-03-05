@@ -4,6 +4,7 @@ import jakarta.persistence.*
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import java.util.*
+import kotlin.collections.HashSet
 
 @Entity
 @Table(name = "hoc_sinh")
@@ -30,5 +31,9 @@ class Student (
 
         @OneToOne
         @JoinColumn(name = "user_id")
-        private val account: Account? = null
+        private val account: Account,
+
+        @ManyToMany(mappedBy = "students")
+        @Column(length = 45)
+        var parents: Set<Parent> = HashSet()
 ): User()
