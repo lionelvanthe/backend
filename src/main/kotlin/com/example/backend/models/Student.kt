@@ -33,7 +33,4 @@ class Student (
         @JoinColumn(name = "user_id")
         private val account: Account,
 
-        @ManyToMany(mappedBy = "students")
-        @Column(length = 45)
-        var parents: Set<Parent> = HashSet()
 ): User()

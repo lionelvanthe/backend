@@ -28,22 +28,8 @@ data class Parent (
         @Email
         private val email: String? = null,
 
-        @Column(name = "moi_quan_he")
-        @NotBlank
-        @Size(max = 45)
-        private val relationship: String,
-
         @Column(name = "so_dien_thoai")
         @NotBlank @Size(max = 255)
         private val phoneNumber:  String,
-
-        @ManyToMany
-        @JoinTable(
-                name = "MoiQuanHe",
-                joinColumns = [JoinColumn(nullable = false,name = "idphu_huynh")],
-                inverseJoinColumns = [JoinColumn(name = "idhoc_sinh")]
-        )
-        @Column(length = 45)
-        val students: Set<Student> = HashSet()
 
 )
