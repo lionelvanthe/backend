@@ -33,4 +33,8 @@ class Student (
         @JoinColumn(name = "user_id")
         private val account: Account,
 
+        @ManyToOne
+        @JoinColumn(name = "idlop")
+        var classRoom: ClassRoom ? = null
+
 ): User()

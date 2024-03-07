@@ -1,4 +1,4 @@
-package com.example.backend.service.user
+package com.example.backend.service
 
 import com.example.backend.models.Relationship
 import com.example.backend.repository.RelationshipRepository

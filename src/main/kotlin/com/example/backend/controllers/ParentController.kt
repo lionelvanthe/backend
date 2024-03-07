@@ -2,10 +2,9 @@ package com.example.backend.controllers
 
 import com.example.backend.models.Parent
 import com.example.backend.models.Relationship
-import com.example.backend.models.Student
 import com.example.backend.payload.request.ParentRequest
 import com.example.backend.payload.response.MessageResponse
-import com.example.backend.service.user.RelationshipService
+import com.example.backend.service.RelationshipService
 import com.example.backend.service.user.StudentServiceImp
 import com.example.backend.service.user.parent.ParentService
 import org.springframework.http.ResponseEntity
