@@ -1,5 +1,6 @@
 package com.example.backend.models
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
@@ -35,6 +36,8 @@ class Student (
 
         @ManyToOne
         @JoinColumn(name = "idlop")
+        @JsonBackReference
+
         var classRoom: ClassRoom ? = null
 
 ): User()

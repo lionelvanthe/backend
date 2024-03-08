@@ -1,5 +1,6 @@
 package com.example.backend.models
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
@@ -27,5 +28,6 @@ data class ClassRoom (
         private val endTime: Date? = null,
 
         @OneToMany(mappedBy = "classRoom")
+        @JsonBackReference
         var  students: List<Student>? = null
 )

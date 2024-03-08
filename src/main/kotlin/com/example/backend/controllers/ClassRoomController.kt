@@ -31,7 +31,11 @@ class ClassRoomController(private val classRoomService: ClassRoomService,
             @RequestParam(name = "idClass") idClass: String,
             @RequestBody idStudents: List<String>): ResponseEntity<*> {
 
-        val classRoom = classRoomService.findById(idClass).get()
+        val classRoom: ClassRoom? = classRoomService.findById(idClass)?.get()
+
+        if (classRoom == null) {
+            ResponseEntity.badRequest().body("class not found")
+        }
 
         idStudents.forEach {
             val stu = studentServiceImp.getUser(it).get()
@@ -40,5 +44,18 @@ class ClassRoomController(private val classRoomService: ClassRoomService,
         }
 
         return ResponseEntity.ok(MessageResponse("add student into class successfully!"))
+    }
+
+    @GetMapping("/{idClass}/student")
+    fun getStudentInClassRoom(@PathVariable idClass: String): ResponseEntity<*> {
+
+        val classRoom = classRoomService.findById(idClass)?.get()
+
+        if (classRoom == null) {
+            return ResponseEntity.badRequest().body("class not found")
+        } else {
+            return ResponseEntity.ok(studentServiceImp.findStudentByClass(classRoom))
+        }
+
     }
 }

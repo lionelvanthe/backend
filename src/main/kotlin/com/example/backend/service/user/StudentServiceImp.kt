@@ -1,5 +1,6 @@
 package com.example.backend.service.user
 
+import com.example.backend.models.ClassRoom
 import com.example.backend.models.Student
 import com.example.backend.repository.StudentRepository
 import com.example.backend.service.user.UserService
@@ -22,6 +23,10 @@ class StudentServiceImp(private val studentRepository: StudentRepository): UserS
 
     override fun addUser(student: Student): Student {
         return studentRepository.save(student)
+    }
+
+    fun findStudentByClass(classRoom: ClassRoom): List<Student> {
+        return studentRepository.findAllByClassRoom(classRoom)
     }
 
 }
