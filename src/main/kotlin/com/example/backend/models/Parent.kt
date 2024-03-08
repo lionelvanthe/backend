@@ -13,23 +13,24 @@ data class Parent (
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "idphu_huynh")
-        private val id: Int = 0,
+        val id: Int = 0,
 
         @Column(name = "ho_ten")
         @NotBlank @Size(max = 255)
-        private val name: String? = null,
+        val name: String,
 
         @Column(name = "ngay_sinh")
         @NotBlank
-        private val dayOfBirth: Date? = null,
+        val dayOfBirth: Date,
 
         @Column(name = "email")
         @NotBlank @Size(max = 255)
         @Email
-        private val email: String? = null,
+        val email: String? = null,
 
         @Column(name = "so_dien_thoai")
         @NotBlank @Size(max = 255)
-        private val phoneNumber:  String,
+        val phoneNumber:  String,
+
 
 )

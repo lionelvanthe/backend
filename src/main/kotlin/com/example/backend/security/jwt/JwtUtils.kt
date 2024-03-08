@@ -27,7 +27,6 @@ class JwtUtils {
     private val jwtCookie: String? = null
     fun getJwtFromCookies(request: HttpServletRequest?): String? {
         val cookie = WebUtils.getCookie(request!!, jwtCookie!!)
-        println("thenv: ${cookie}, ${cookie?.value}")
         return cookie?.value
     }
 

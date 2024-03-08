@@ -75,6 +75,7 @@ class WebSecurityConfig(
                             .requestMatchers("/api/test/**").permitAll()
                             .requestMatchers("/api/parent/**").permitAll()
                             .requestMatchers("/api/class/**").permitAll()
+                            .requestMatchers("/api/student/**").permitAll()
                             .anyRequest().authenticated()
                 }
                 )

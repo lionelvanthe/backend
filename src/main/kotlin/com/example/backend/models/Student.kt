@@ -37,7 +37,7 @@ class Student (
         @ManyToOne
         @JoinColumn(name = "idlop")
         @JsonBackReference
+        var classRoom: ClassRoom ? = null,
 
-        var classRoom: ClassRoom ? = null
 
 ): User()

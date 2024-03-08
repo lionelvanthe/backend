@@ -1,5 +1,6 @@
 package com.example.backend.models
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
 
 
@@ -11,13 +12,15 @@ class Relationship(
     private val id: Int = 0,
 
     @ManyToOne
-    @JoinColumn(name = "idhoc_sinh", nullable = false)
-    private val student: Student? = null,
+    @JoinColumn(name = "idhoc_sinh")
+    @JsonBackReference
+    val student: Student,
 
     @ManyToOne
-    @JoinColumn(name = "idphu_huynh", nullable = false)
-    private val parent: Parent? = null,
+    @JoinColumn(name = "idphu_huynh")
+    @JsonBackReference
+    val parent: Parent,
 
     @Column(name = "MoiQuanHe")
-    private val relationship: String? = null
+    val relationship: String
 )
