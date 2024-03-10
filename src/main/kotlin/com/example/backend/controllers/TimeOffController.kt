@@ -25,6 +25,9 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.*
 import java.sql.Time
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.*
 
 //for Angular Client (withCredentials)
 //@CrossOrigin(origins = "http://localhost:8081", maxAge = 3600, allowCredentials="true")
@@ -33,6 +36,7 @@ import java.sql.Time
 @RequestMapping("/api/timeoff")
 class TimeOffController(
         private val timeOffService: TimeOffService,
+        private val classRoomService: ClassRoomService,
         private val studentServiceImp: StudentServiceImp) {
 
     @PostMapping("/{idStudent}/create")
@@ -54,11 +58,29 @@ class TimeOffController(
         return ResponseEntity.ok("creat time off successfully")
     }
 
-    @GetMapping("/{idStudent}/get")
-    fun getTimeOffByStudent( @PathVariable idStudent: String): ResponseEntity<*> {
+    @GetMapping("/{idStudent}/get_by_student")
+    fun getTimeOffByStudent(@PathVariable idStudent: String,
+                            @RequestParam (name = "time") time: LocalDate): ResponseEntity<*> {
         val student = studentServiceImp.getUser(idStudent).get()
 
-        val timeOffs = timeOffService.getTimeOffByStudent(student)
+        val timeOffs = timeOffService.getTimeOffByStudent(student,
+                Date.from(time.atStartOfDay(ZoneId.systemDefault()).toInstant()))
+
+        return if (timeOffs != null) {
+            ResponseEntity.ok(timeOffs)
+        } else {
+            ResponseEntity.ok("nothing")
+        }
+    }
+    @GetMapping("/{idClass}/get_by_class")
+    fun getTimeOffByDateAndClass(
+            @PathVariable idClass: String,
+            @RequestParam (name = "time") time: LocalDate): ResponseEntity<*> {
+        val classRoom = classRoomService.findById(idClass)?.get() ?: return ResponseEntity.ok("try again")
+
+        val timeOffs = timeOffService.getTimeOffByDateAndClass(
+                Date.from(time.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                classRoom)
 
         return if (timeOffs != null) {
             ResponseEntity.ok(timeOffs)
