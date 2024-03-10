@@ -39,5 +39,9 @@ class Student (
         @JsonBackReference
         var classRoom: ClassRoom ? = null,
 
+        @OneToMany(mappedBy = "student")
+        @JsonBackReference
+        var  attendances: List<Attendance>? = null
+
 
 ): User()

@@ -76,6 +76,7 @@ class WebSecurityConfig(
                             .requestMatchers("/api/parent/**").permitAll()
                             .requestMatchers("/api/class/**").permitAll()
                             .requestMatchers("/api/student/**").permitAll()
+                            .requestMatchers("/api/attendance/**").permitAll()
                             .anyRequest().authenticated()
                 }
                 )
