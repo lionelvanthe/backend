@@ -41,7 +41,10 @@ class Student (
 
         @OneToMany(mappedBy = "student")
         @JsonBackReference
-        var  attendances: List<Attendance>? = null
+        var  attendances: List<Attendance>? = null,
 
+        @OneToMany(mappedBy = "student")
+        @JsonBackReference
+        var  timeOffs: List<TimeOff>? = null
 
 ): User()

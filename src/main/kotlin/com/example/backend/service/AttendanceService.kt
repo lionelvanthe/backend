@@ -1,7 +1,7 @@
 package com.example.backend.service
 
 import com.example.backend.models.Attendance
-import com.example.backend.models.EStateAttendance
+import com.example.backend.models.enums.EStateAttendance
 import com.example.backend.models.Student
 import com.example.backend.repository.AttendanceRepository
 import org.springframework.stereotype.Service

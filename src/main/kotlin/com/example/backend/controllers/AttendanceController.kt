@@ -1,12 +1,10 @@
 package com.example.backend.controllers
 
 import com.example.backend.models.Attendance
-import com.example.backend.models.EStateAttendance
+import com.example.backend.models.enums.EStateAttendance
 import com.example.backend.payload.request.AttendanceRequest
 import com.example.backend.payload.response.MessageResponse
-import com.example.backend.payload.response.Parents
 import com.example.backend.service.AttendanceService
-import com.example.backend.service.RelationshipService
 import com.example.backend.service.user.StudentServiceImp
 import com.example.backend.service.user.TeacherServiceImp
 import org.springframework.http.ResponseEntity
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.*
-import javax.xml.crypto.Data
 
 
 @CrossOrigin(origins = ["*"], maxAge = 3600)

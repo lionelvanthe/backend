@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.*
 @CrossOrigin(origins = ["*"], maxAge = 3600)
 @RestController
 @RequestMapping("/api/class")
-class ClassRoomController(private val classRoomService: ClassRoomService,
+class ClassRoomController(
+        private val classRoomService: ClassRoomService,
         private val studentServiceImp: StudentServiceImp) {
 
     @PostMapping("/add")

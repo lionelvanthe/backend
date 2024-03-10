@@ -1,5 +1,6 @@
 package com.example.backend.models
 
+import com.example.backend.models.enums.ERole
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
@@ -7,23 +8,23 @@ import jakarta.validation.constraints.NotNull
 @Entity
 @Table(name = "nguoi_dung", uniqueConstraints = [UniqueConstraint(columnNames = arrayOf("username"))])
 data class Account(
-    @Id
+        @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotBlank
     @NotNull
     @Column(name = "idnguoi_dung")
     var id: Int = 0,
-    @NotBlank
+        @NotBlank
     var username: String,
-    @NotBlank
+        @NotBlank
     var password: String,
-    @NotBlank
+        @NotBlank
     var role: String = ERole.ROLE_STUDENT.name,
 
-    @OneToOne(mappedBy = "account")
+        @OneToOne(mappedBy = "account")
     private val student: Student? = null,
 
-    @OneToOne(mappedBy = "account")
+        @OneToOne(mappedBy = "account")
     private val teacher: Teacher? = null
 
 )

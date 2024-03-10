@@ -1,17 +1,16 @@
 package com.example.backend.controllers
 
 import com.example.backend.models.*
+import com.example.backend.models.enums.ERole
 import com.example.backend.payload.request.LoginRequest
 import com.example.backend.payload.request.TeacherSignupRequest
 import com.example.backend.payload.response.MessageResponse
 import com.example.backend.payload.response.UserInfoResponse
-import com.example.backend.repository.TeacherRepository
 import com.example.backend.repository.AccountRepository
 import com.example.backend.security.jwt.JwtUtils
 import com.example.backend.security.services.UserDetailsImpl
 import com.example.backend.service.user.StudentServiceImp
 import com.example.backend.service.user.TeacherServiceImp
-import com.example.backend.service.user.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity

@@ -69,7 +69,7 @@ class WebSecurityConfig(
                     exception.authenticationEntryPoint(unauthorizedHandler)
                 }
                 .sessionManagement { session: SessionManagementConfigurer<HttpSecurity?> -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-                .authorizeHttpRequests(Customizer { auth ->
+                .authorizeHttpRequests { auth ->
                     auth
                             .requestMatchers("/api/auth/**").permitAll()
                             .requestMatchers("/api/test/**").permitAll()
@@ -77,9 +77,9 @@ class WebSecurityConfig(
                             .requestMatchers("/api/class/**").permitAll()
                             .requestMatchers("/api/student/**").permitAll()
                             .requestMatchers("/api/attendance/**").permitAll()
+                            .requestMatchers("/api/timeoff/**").permitAll()
                             .anyRequest().authenticated()
                 }
-                )
         http.authenticationProvider(authenticationProvider())
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter::class.java)
         return http.build()
