@@ -88,4 +88,18 @@ class TimeOffController(
             ResponseEntity.ok("nothing")
         }
     }
+
+    @PostMapping("/{idTeacher}")
+    fun confirmTimeOff(@PathVariable idTeacher: String,
+                       @RequestParam (name = "idTimeOff") idTimeOff: Int,
+                       @RequestParam (name = "state") state: String): ResponseEntity<*> {
+
+        val timeOff = timeOffService.findById(idTimeOff)?.get() ?: return ResponseEntity.ok("nothing")
+        timeOff.state = state
+        timeOff.idTeacher  = idTeacher
+
+        timeOffService.update(timeOff)
+
+        return ResponseEntity.ok("successfully")
+    }
 }

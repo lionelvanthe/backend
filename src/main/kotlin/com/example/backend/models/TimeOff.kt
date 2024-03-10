@@ -18,7 +18,7 @@ data class TimeOff(
 
         @Column(name = "idgiao_vien")
         @NotBlank @Size(max = 45)
-        val idTeacher: String? = null,
+        var idTeacher: String? = null,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
         @Column(name = "ngay_bat_dau")
@@ -30,7 +30,7 @@ data class TimeOff(
         val endTime: Date,
 
         @Column(name = "trang_thai")
-        val state: String = ETimeOff.PENDING.name,
+        var state: String = ETimeOff.PENDING.name,
 
         @Column(name = "ghi_chu")
         val note: String? = null,

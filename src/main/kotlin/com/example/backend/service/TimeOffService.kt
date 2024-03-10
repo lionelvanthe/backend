@@ -17,6 +17,14 @@ class TimeOffService (private val timeOffRepository: TimeOffRepository) {
         return timeOffRepository.getAllByStudentAndDate(date, student)
     }
 
+    fun findById(id: Int): Optional<TimeOff>? {
+        return timeOffRepository.findById(id)
+    }
+
+    fun update(timeOff: TimeOff) {
+        timeOffRepository.save(timeOff)
+    }
+
     fun getTimeOffByDateAndClass(requestDate: Date, classRoom: ClassRoom): List<TimeOff>? {
         return timeOffRepository.getTimeOffByDateAndClass(requestDate, classRoom)
     }
