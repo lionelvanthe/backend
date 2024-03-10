@@ -12,4 +12,5 @@ interface StudentRepository : JpaRepository<Student, Int> {
     fun findById(id: String): Optional<Student>
     fun existsById(id: String): Boolean
     fun findAllByClassRoom(classRoom: ClassRoom): List<Student>
+
 }

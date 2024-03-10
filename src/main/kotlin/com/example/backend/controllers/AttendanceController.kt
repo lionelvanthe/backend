@@ -11,7 +11,10 @@ import com.example.backend.service.user.StudentServiceImp
 import com.example.backend.service.user.TeacherServiceImp
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.*
+import javax.xml.crypto.Data
 
 
 @CrossOrigin(origins = ["*"], maxAge = 3600)
@@ -23,7 +26,7 @@ class AttendanceController(
         private val attendanceService: AttendanceService) {
 
     @PostMapping("/{idTeacher}/rollcall")
-    fun addInfoParent(@PathVariable idTeacher: String,
+    fun rollCall(@PathVariable idTeacher: String,
                       @RequestBody attendanceRequests: List<AttendanceRequest>): ResponseEntity<*> {
 
         val teacher = teacherServiceImp.getUser(idTeacher).get()
@@ -48,6 +51,19 @@ class AttendanceController(
         }
 
         return ResponseEntity.ok(MessageResponse("roll call successfully!"))
+
+    }
+
+    @GetMapping("/{idStudent}/get")
+    fun getAttendance(@PathVariable idStudent: String,
+                      @RequestParam (name = "start_time") startTime: LocalDate,
+                      @RequestParam (name = "end_time") endTime: LocalDate): ResponseEntity<*> {
+
+        val student = studentServiceImp.getUser(idStudent).get()
+        val attendances = attendanceService.getAttendanceByStudent(student,
+                Date.from(startTime.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                Date.from(endTime.atStartOfDay(ZoneId.systemDefault()).toInstant()))
+        return ResponseEntity.ok(attendances)
 
     }
 }

@@ -16,11 +16,11 @@ data class Attendance(
         private val id: Int = 0,
 
         @Column(name = "thoi_gian")
-        private val time: Date? = null,
+        val time: Date? = null,
 
         @Column(name = "trang_thai")
         @NotBlank
-        private val state: String? = null,
+        val state: String? = null,
 
         @ManyToOne
         @JoinColumn(name = "idhoc_sinh")

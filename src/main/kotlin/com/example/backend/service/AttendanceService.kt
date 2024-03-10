@@ -1,9 +1,11 @@
 package com.example.backend.service
 
 import com.example.backend.models.Attendance
+import com.example.backend.models.EStateAttendance
 import com.example.backend.models.Student
 import com.example.backend.repository.AttendanceRepository
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class AttendanceService(private val attendanceRepository: AttendanceRepository) {
@@ -12,7 +14,11 @@ class AttendanceService(private val attendanceRepository: AttendanceRepository) 
         attendanceRepository.save(attendance)
     }
 
-    fun getAttendanceByStudent(student: Student): List<Attendance>? {
-        return attendanceRepository.findAllByStudent(student)
+    fun getAttendanceByStudent(student: Student,
+                               startTime: Date,
+                               endTime: Date,
+                               state: String = EStateAttendance.ATTENDING_CLASS.name
+    ): List<Attendance>? {
+        return attendanceRepository.findAllByStudentAndTimeBetweenAndStateNot(student, startTime, endTime, state)
     }
 }
