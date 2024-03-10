@@ -52,7 +52,18 @@ class TimeOffController(
             timeOffService.createTimeOff(timeOff)
         }
         return ResponseEntity.ok("creat time off successfully")
+    }
 
+    @GetMapping("/{idStudent}/get")
+    fun getTimeOffByStudent( @PathVariable idStudent: String): ResponseEntity<*> {
+        val student = studentServiceImp.getUser(idStudent).get()
 
+        val timeOffs = timeOffService.getTimeOffByStudent(student)
+
+        return if (timeOffs != null) {
+            ResponseEntity.ok(timeOffs)
+        } else {
+            ResponseEntity.ok("nothing")
+        }
     }
 }

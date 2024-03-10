@@ -2,6 +2,7 @@ package com.example.backend.models
 
 import com.example.backend.models.enums.ETimeOff
 import com.fasterxml.jackson.annotation.JsonBackReference
+import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
@@ -19,10 +20,12 @@ data class TimeOff(
         @NotBlank @Size(max = 45)
         val idTeacher: String? = null,
 
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
         @Column(name = "ngay_bat_dau")
         @NotBlank
         val startTime: Date,
 
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
         @Column(name = "ngay_ket_thuc")
         val endTime: Date,
 

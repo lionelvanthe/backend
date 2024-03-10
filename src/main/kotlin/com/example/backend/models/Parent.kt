@@ -1,5 +1,6 @@
 package com.example.backend.models
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.persistence.*
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
@@ -21,6 +22,7 @@ data class Parent (
 
         @Column(name = "ngay_sinh")
         @NotBlank
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
         val dayOfBirth: Date,
 
         @Column(name = "email")
