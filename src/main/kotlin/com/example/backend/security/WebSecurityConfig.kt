@@ -78,6 +78,7 @@ class WebSecurityConfig(
                             .requestMatchers("/api/student/**").permitAll()
                             .requestMatchers("/api/attendance/**").permitAll()
                             .requestMatchers("/api/timeoff/**").permitAll()
+                            .requestMatchers("/api/prescription/**").permitAll()
                             .anyRequest().authenticated()
                 }
         http.authenticationProvider(authenticationProvider())
