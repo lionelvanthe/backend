@@ -3,6 +3,7 @@ package com.example.backend.controllers
 import com.example.backend.models.*
 import com.example.backend.payload.request.MedicineRequest
 import com.example.backend.payload.request.PrescriptionRequest
+import com.example.backend.payload.response.PrescriptionResponse
 import com.example.backend.service.ClassRoomService
 import com.example.backend.service.MedicineService
 import com.example.backend.service.PrescriptionService
@@ -31,6 +32,9 @@ class PrescriptionController(
 
         val student = studentServiceImp.getUser(idStudent).get()
 
+        prescriptionRequest.medicines.map { medi ->
+            val medicine = Medicine(name = medi.name, note = medi.note, guide = medi.guide)
+        }
 
         prescriptionRequest.let {
             val prescription = Prescription(
@@ -56,11 +60,16 @@ class PrescriptionController(
                             @RequestParam (name = "time") time: LocalDate): ResponseEntity<*> {
         val student = studentServiceImp.getUser(idStudent).get()
 
-        val prescriptions = prescriptionService.getPrescriptionByStudent(student,
+        val prescription = prescriptionService.getPrescriptionByStudent(student,
                 Date.from(time.atStartOfDay(ZoneId.systemDefault()).toInstant()))
 
-        return if (prescriptions != null) {
-            ResponseEntity.ok(prescriptions)
+        return if (prescription != null) {
+
+            val medicines = medicineService.getMedicineByPrescription(prescription)
+            val prescriptionResponse = prescription.let {
+                PrescriptionResponse(it.pathological, startTime = it.startTime!!, endTime = it.endTime!!, medicines =  medicines!!)
+            }
+            ResponseEntity.ok(prescriptionResponse)
         } else {
             ResponseEntity.ok("nothing")
         }
@@ -76,7 +85,11 @@ class PrescriptionController(
                 classRoom)
 
         return if (prescriptions != null) {
-            ResponseEntity.ok(prescriptions)
+            val prescriptionsResponse = prescriptions.map {
+                val medicines = medicineService.getMedicineByPrescription(it)
+                PrescriptionResponse(pathological = it.pathological, startTime = it.startTime!!, endTime = it.endTime!!, medicines = medicines!!)
+            }
+            ResponseEntity.ok(prescriptionsResponse)
         } else {
             ResponseEntity.ok("nothing")
         }

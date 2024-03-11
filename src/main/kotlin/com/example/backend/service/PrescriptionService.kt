@@ -13,7 +13,7 @@ class PrescriptionService (private val prescriptionRepository: PrescriptionRepos
         return prescriptionRepository.save(prescription)
     }
 
-    fun getPrescriptionByStudent(student: Student, date: Date): List<Prescription>? {
+    fun getPrescriptionByStudent(student: Student, date: Date): Prescription? {
         return prescriptionRepository.getAllByStudentAndDate(date, student)
     }
 

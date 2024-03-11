@@ -15,7 +15,7 @@ interface PrescriptionRepository: JpaRepository<Prescription, Int> {
             "WHERE :requestDate BETWEEN to.startTime AND to.endTime " +
             "AND to.student = :student")
     fun getAllByStudentAndDate( @Param("requestDate") requestDate: Date,
-                                @Param("student")student: Student): List<Prescription>?
+                                @Param("student")student: Student): Prescription?
 
 
     @Query("SELECT to FROM Prescription to " +
