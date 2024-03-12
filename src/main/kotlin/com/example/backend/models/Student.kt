@@ -50,6 +50,11 @@ class Student (
 
         @OneToMany(mappedBy = "student")
         @JsonBackReference
-        var  prescriptions: List<Prescription>? = null
+        var  prescriptions: List<Prescription>? = null,
+
+
+        @OneToMany(mappedBy = "student")
+        @JsonBackReference
+        var  dailyReview: List<DailyReview>? = null
 
 ): User()
