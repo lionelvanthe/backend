@@ -14,7 +14,7 @@ data class DailyMenu (
         @Column(name = "idthuc_don")
         val id: Int = 0,
 
-        @Column(name = "ngày")
+        @Column(name = "ngay")
         @NotBlank
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "GMT+7")
         val time: Date,

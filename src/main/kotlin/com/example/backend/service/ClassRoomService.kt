@@ -16,7 +16,7 @@ class ClassRoomService(private val classRoomRepository: ClassRoomRepository) {
         classRoomRepository.save(classRoom)
     }
 
-    fun findById(id: String): Optional<ClassRoom>? {
+    fun findById(id: String): Optional<ClassRoom> {
         return classRoomRepository.findById(id)
     }
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
+import java.sql.Time
 import java.util.*
 
 
@@ -17,8 +18,12 @@ data class Food (
         @Column(name = "idmon_an")
         private val id: Int = 0,
 
+        @Column(name = "ten")
+        @NotBlank
+        var name: String,
+
         @Column(name = "nguyen_lieu")
-        @NotBlank @Size(max = 45)
+        @NotBlank
         var ingredients: String? = null,
 
         @Column(name = "dinh_duong")
@@ -27,16 +32,14 @@ data class Food (
         @Column(name = "url_anh")
         val urlImage: String? = null,
 
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
         @Column(name = "thoi_gian_bat_dau")
         @NotBlank
-        val startTime: Date,
+        val startTime: Time,
 
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
         @Column(name = "thoi_gian_ket_thuc")
-        val endTime: Date,
+        val endTime: Time,
 
         @ManyToMany(mappedBy = "foods")
-        var menus: MutableSet<DailyMenu> = mutableSetOf()
+        private var menus: MutableSet<DailyMenu> = mutableSetOf()
 
 )
