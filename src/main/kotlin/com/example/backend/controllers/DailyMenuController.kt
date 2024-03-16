@@ -8,6 +8,7 @@ import com.example.backend.payload.request.DailyReviewRequest
 import com.example.backend.service.ClassRoomService
 import com.example.backend.service.DailyMenuService
 import com.example.backend.service.FoodService
+import com.example.backend.service.user.StudentServiceImp
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
@@ -21,7 +22,8 @@ import kotlin.collections.ArrayList
 class DailyMenuController(
         private val classRoomService: ClassRoomService,
         private val dailyMenuService: DailyMenuService,
-        private val foodService: FoodService
+        private val foodService: FoodService,
+        private val studentService: StudentServiceImp
 ) {
 
     @PostMapping("/{idClass}/create")
@@ -56,17 +58,17 @@ class DailyMenuController(
 
     }
 
-    @GetMapping("/{idClass}/get")
-    fun getDailyMenu(
-            @PathVariable idClass: String,
+    @GetMapping("/{idStudent}/get")
+    fun getDailyMenuByStudent(
+            @PathVariable idStudent: String,
             @RequestParam (name = "time") time: LocalDate): ResponseEntity<*> {
 
-        val classRoom = classRoomService.findById(idClass).get()
+        val student = studentService.getUser(idStudent).get()
 
-        val dailyMenu = dailyMenuService.finDailyMenuByClassRoomAndTime(classRoom,
+        val classRoom = student.classRoom
+
+        val dailyMenu = dailyMenuService.finDailyMenuByClassRoomAndTime(classRoom!!,
                 Date.from(time.atStartOfDay(ZoneId.systemDefault()).toInstant()))
-
-        println("thenv: ${dailyMenu.id}")
 
         val foods = dailyMenuService.findFoodsById(dailyMenu.id)
 
