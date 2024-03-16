@@ -32,9 +32,6 @@ class PrescriptionController(
 
         val student = studentServiceImp.getUser(idStudent).get()
 
-        prescriptionRequest.medicines.map { medi ->
-            val medicine = Medicine(name = medi.name, note = medi.note, guide = medi.guide)
-        }
 
         prescriptionRequest.let {
             val prescription = Prescription(

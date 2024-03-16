@@ -32,5 +32,9 @@ data class ClassRoom (
 
         @OneToMany(mappedBy = "classRoom")
         @JsonBackReference
-        var  students: List<Student>? = null
+        var  students: List<Student>? = null,
+
+        @OneToMany(mappedBy = "classRoom")
+        @JsonBackReference
+        var  timeTables: List<Timetable>? = null
 )

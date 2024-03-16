@@ -1,5 +1,6 @@
 package com.example.backend.models
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.persistence.*
 import jakarta.validation.constraints.Email
@@ -44,5 +45,9 @@ class Teacher(
 
         @OneToOne
         @JoinColumn(name = "user_id")
-        val account: Account? = null
+        val account: Account? = null,
+
+        @OneToMany(mappedBy = "teacher")
+        @JsonBackReference
+        var  activity: List<Activity>? = null
 ): User()
