@@ -7,6 +7,7 @@ import jakarta.persistence.*
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
 @Entity
@@ -62,6 +63,14 @@ class Student (
         var fees: MutableSet<Fee> = mutableSetOf(),
 
         @Column(name = "loai")
-        var type: String = EStudent.NORMAL.name
+        var type: String = EStudent.NORMAL.name,
 
-): User()
+        @OneToMany(mappedBy = "student")
+        @JsonBackReference
+        var  heights: List<Height> = ArrayList(),
+
+        @OneToMany(mappedBy = "student")
+        @JsonBackReference
+        var  weights: List<Weight> = ArrayList(),
+
+        ): User()
