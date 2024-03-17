@@ -82,6 +82,7 @@ class WebSecurityConfig(
                             .requestMatchers("/api/dailyreview/**").permitAll()
                             .requestMatchers("/api/dailymenu/**").permitAll()
                             .requestMatchers("/api/timetable/**").permitAll()
+                            .requestMatchers("/api/fee/**").permitAll()
                             .anyRequest().authenticated()
                 }
         http.authenticationProvider(authenticationProvider())

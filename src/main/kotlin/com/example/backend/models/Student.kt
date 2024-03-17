@@ -1,5 +1,6 @@
 package com.example.backend.models
 
+import com.example.backend.models.enums.EStudent
 import com.fasterxml.jackson.annotation.JsonBackReference
 import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.persistence.*
@@ -55,6 +56,12 @@ class Student (
 
         @OneToMany(mappedBy = "student")
         @JsonBackReference
-        var  dailyReview: List<DailyReview>? = null
+        var  dailyReview: List<DailyReview>? = null,
+
+        @ManyToMany(mappedBy = "students")
+        var fees: MutableSet<Fee> = mutableSetOf(),
+
+        @Column(name = "loai")
+        var type: String = EStudent.NORMAL.name
 
 ): User()

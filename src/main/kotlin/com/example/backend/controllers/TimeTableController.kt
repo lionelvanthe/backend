@@ -26,7 +26,7 @@ class TimeTableController(
 ) {
 
     @PostMapping("/{idClass}/create")
-    fun createDailyMenu(
+    fun createTimeTable(
             @PathVariable idClass: String,
             @RequestBody timeTableRequest: TimeTableRequest): ResponseEntity<*> {
 
@@ -51,7 +51,7 @@ class TimeTableController(
 
             }
 
-            return ResponseEntity.ok("create menu successfully")
+            return ResponseEntity.ok("create time table successfully")
 
         } else {
             return ResponseEntity.ok("class not found")
@@ -60,7 +60,7 @@ class TimeTableController(
     }
 
     @GetMapping("/{idStudent}/get")
-    fun getDailyMenuByStudent(
+    fun getTimeTableByStudent(
             @PathVariable idStudent: String,
             @RequestParam(name = "time") time: LocalDate): ResponseEntity<*> {
 
