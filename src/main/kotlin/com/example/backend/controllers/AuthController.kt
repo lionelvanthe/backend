@@ -13,13 +13,17 @@ import com.example.backend.service.user.StudentServiceImp
 import com.example.backend.service.user.TeacherServiceImp
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.*
+import javax.naming.AuthenticationException
+
 
 //for Angular Client (withCredentials)
 //@CrossOrigin(origins = "http://localhost:8081", maxAge = 3600, allowCredentials="true")
@@ -47,18 +51,28 @@ class AuthController(
 
     @PostMapping("/signin")
     fun authenticateUser(@RequestBody loginRequest: LoginRequest?): ResponseEntity<*> {
-        val authentication = authenticationManager
-                .authenticate(UsernamePasswordAuthenticationToken(loginRequest!!.username, loginRequest.password))
-        SecurityContextHolder.getContext().authentication = authentication
-        val userDetails = authentication.principal as UserDetailsImpl
-        val jwtCookie = jwtUtils.generateJwtCookie(userDetails)
-        val roles = userDetails.authorities.stream()
-                .map { item: GrantedAuthority? -> item!!.authority }
-                .toList()
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .body(UserInfoResponse(userDetails.id,
-                        userDetails.username,
-                        roles[0]))
+
+
+        return try {
+            val authentication = authenticationManager
+                    .authenticate(UsernamePasswordAuthenticationToken(loginRequest!!.username, loginRequest.password))
+            SecurityContextHolder.getContext().authentication = authentication
+            val userDetails = authentication.principal as UserDetailsImpl
+            val jwtCookie = jwtUtils.generateJwtCookie(userDetails)
+            val roles = userDetails.authorities.stream()
+                    .map { item: GrantedAuthority? -> item!!.authority }
+                    .toList()
+            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                    .body(UserInfoResponse(userDetails.id,
+                            userDetails.username,
+                            roles[0]))
+        } catch (e: BadCredentialsException) {
+            // Xử lý khi mật khẩu sai
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body<String>("Mật khẩu không đúng")
+        } catch (e: AuthenticationException) {
+            // Xử lý khi tên người dùng sai hoặc lỗi xác thực khác
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body<String>("Tên người dùng không tồn tại hoặc lỗi xác thực")
+        }
     }
 
     @PostMapping("/signup/{role}")
