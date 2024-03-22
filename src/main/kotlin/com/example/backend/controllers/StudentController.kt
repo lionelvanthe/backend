@@ -45,4 +45,16 @@ class StudentController(
             ResponseEntity.status(HttpStatus.NOT_FOUND).body("student not found")
         }
     }
+
+    @GetMapping("/{idStudent}/get")
+    fun addInfoStudent(@PathVariable idStudent: String): ResponseEntity<*> {
+
+        val student = studentServiceImp.getUser(idStudent)
+
+        return if (student.isPresent) {
+            ResponseEntity.ok(student.get())
+        } else {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body("student not found")
+        }
+    }
 }
