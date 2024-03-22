@@ -3,6 +3,8 @@ package com.example.backend.controllers
 import com.example.backend.payload.response.Parents
 import com.example.backend.service.RelationshipService
 import com.example.backend.service.user.StudentServiceImp
+import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -29,6 +31,18 @@ class StudentController(
                 parentList.add(parents)
             }
             ResponseEntity.ok(parentList)
+        }
+    }
+
+    @GetMapping("/{idStudent}/class")
+    fun addInfoClass(@PathVariable idStudent: String): ResponseEntity<*> {
+
+        val student = studentServiceImp.getUser(idStudent)
+
+        return if (student.isPresent) {
+            ResponseEntity.ok(student.get().classRoom)
+        } else {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body("student not found")
         }
     }
 }

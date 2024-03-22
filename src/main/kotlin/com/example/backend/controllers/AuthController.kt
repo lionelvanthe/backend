@@ -68,7 +68,7 @@ class AuthController(
                             roles[0]))
         } catch (e: BadCredentialsException) {
             // Xử lý khi mật khẩu sai
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body<String>("Mật khẩu không đúng")
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body<String>("Mật khẩu không đúng")
         } catch (e: AuthenticationException) {
             // Xử lý khi tên người dùng sai hoặc lỗi xác thực khác
             ResponseEntity.status(HttpStatus.UNAUTHORIZED).body<String>("Tên người dùng không tồn tại hoặc lỗi xác thực")
