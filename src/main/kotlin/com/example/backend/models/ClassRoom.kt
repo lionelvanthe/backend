@@ -14,21 +14,21 @@ import java.util.*
 data class ClassRoom (
         @Id
         @Column(name = "idlop")
-        private val id: String,
+        val id: String,
 
         @Column(name = "ten")
         @NotBlank @Size(max = 45)
-        private val name: String? = null,
+        val name: String? = null,
 
         @Column(name = "ngay_bat_dau")
         @NotBlank
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
-        private val startTime: Date? = null,
+        val startTime: Date? = null,
 
         @Column(name = "ngay_ket_thuc")
         @NotBlank
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
-        private val endTime: Date? = null,
+        val endTime: Date? = null,
 
         @OneToMany(mappedBy = "classRoom")
         @JsonBackReference
