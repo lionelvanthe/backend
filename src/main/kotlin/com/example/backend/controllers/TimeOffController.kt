@@ -54,8 +54,8 @@ class TimeOffController(
                     student = student)
 
             timeOffService.createTimeOff(timeOff)
+            return ResponseEntity.ok(timeOff)
         }
-        return ResponseEntity.ok("creat time off successfully")
     }
 
     @GetMapping("/{idStudent}/get_by_student")
