@@ -13,8 +13,16 @@ class TimeOffService (private val timeOffRepository: TimeOffRepository) {
         timeOffRepository.save(timeOff)
     }
 
-    fun getTimeOffByStudent(student: Student, date: Date): List<TimeOff>? {
+    fun getTimeOffByStudentAndDate(student: Student, date: Date): Optional<List<TimeOff>> {
         return timeOffRepository.getAllByStudentAndDate(date, student)
+    }
+
+    fun getTimeOffByStudentAndDate(student: Student, startTime: Date, endTime: Date): Optional<List<TimeOff>> {
+        return timeOffRepository.getAllByStudentAndDate(startTime, endTime, student)
+    }
+
+    fun getTimeOffByStudent(student: Student): Optional<List<TimeOff>> {
+        return timeOffRepository.getAllByStudent(student)
     }
 
     fun findById(id: Int): Optional<TimeOff>? {
@@ -25,7 +33,7 @@ class TimeOffService (private val timeOffRepository: TimeOffRepository) {
         timeOffRepository.save(timeOff)
     }
 
-    fun getTimeOffByDateAndClass(requestDate: Date, classRoom: ClassRoom): List<TimeOff>? {
+    fun getTimeOffByDateAndClass(requestDate: Date, classRoom: ClassRoom): Optional<List<TimeOff>> {
         return timeOffRepository.getTimeOffByDateAndClass(requestDate, classRoom)
     }
 }

@@ -17,6 +17,7 @@ import com.example.backend.service.user.TeacherServiceImp
 import com.example.backend.service.user.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -46,6 +47,13 @@ class TimeOffController(
 
         val student = studentServiceImp.getUser(idStudent).get()
         timeOffRequest.let {
+
+            val timeOffExist = timeOffService.getTimeOffByStudentAndDate(student,it.startTime, it.endTime)
+
+            if (timeOffExist.isPresent && timeOffExist.get().isNotEmpty()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict thoi gian")
+            }
+
             val timeOff = TimeOff(
                     startTime = it.startTime,
                     endTime = it.endTime,
@@ -58,15 +66,28 @@ class TimeOffController(
         }
     }
 
-    @GetMapping("/{idStudent}/get_by_student")
-    fun getTimeOffByStudent(@PathVariable idStudent: String,
+    @GetMapping("/{idStudent}/get_by_student_and_time")
+    fun getTimeOffByStudentAndTime(@PathVariable idStudent: String,
                             @RequestParam (name = "time") time: LocalDate): ResponseEntity<*> {
         val student = studentServiceImp.getUser(idStudent).get()
 
-        val timeOffs = timeOffService.getTimeOffByStudent(student,
+        val timeOffs = timeOffService.getTimeOffByStudentAndDate(student,
                 Date.from(time.atStartOfDay(ZoneId.systemDefault()).toInstant()))
 
-        return if (timeOffs != null) {
+        return if (timeOffs.isPresent) {
+            ResponseEntity.ok(timeOffs)
+        } else {
+            ResponseEntity.ok("nothing")
+        }
+    }
+
+    @GetMapping("/{idStudent}/get_by_student")
+    fun getTimeOffByStudent(@PathVariable idStudent: String): ResponseEntity<*> {
+        val student = studentServiceImp.getUser(idStudent).get()
+
+        val timeOffs = timeOffService.getTimeOffByStudent(student)
+
+        return if (timeOffs.isPresent) {
             ResponseEntity.ok(timeOffs)
         } else {
             ResponseEntity.ok("nothing")
@@ -76,13 +97,13 @@ class TimeOffController(
     fun getTimeOffByDateAndClass(
             @PathVariable idClass: String,
             @RequestParam (name = "time") time: LocalDate): ResponseEntity<*> {
-        val classRoom = classRoomService.findById(idClass)?.get() ?: return ResponseEntity.ok("try again")
+        val classRoom = classRoomService.findById(idClass).get() ?: return ResponseEntity.ok("try again")
 
         val timeOffs = timeOffService.getTimeOffByDateAndClass(
                 Date.from(time.atStartOfDay(ZoneId.systemDefault()).toInstant()),
                 classRoom)
 
-        return if (timeOffs != null) {
+        return if (timeOffs.isPresent) {
             ResponseEntity.ok(timeOffs)
         } else {
             ResponseEntity.ok("nothing")

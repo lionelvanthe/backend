@@ -14,7 +14,7 @@ data class TimeOff(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "iddon_xin_nghi")
-        private val id: Int = 0,
+        val id: Int = 0,
 
         @Column(name = "idgiao_vien")
         @NotBlank @Size(max = 45)
@@ -42,5 +42,8 @@ data class TimeOff(
         @JoinColumn(name = "idhoc_sinh")
         @JsonBackReference
         var student: Student ? = null,
+
+        @Column(name = "thoi_gian_tao")
+        val createAt: Long = System.currentTimeMillis()
 
 )
