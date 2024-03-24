@@ -45,7 +45,7 @@ class Teacher(
 
         @OneToOne
         @JoinColumn(name = "user_id")
-        val account: Account? = null,
+        private val account: Account? = null,
 
         @OneToMany(mappedBy = "teacher")
         @JsonBackReference

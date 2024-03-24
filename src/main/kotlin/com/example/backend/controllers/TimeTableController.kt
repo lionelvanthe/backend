@@ -3,9 +3,11 @@ package com.example.backend.controllers
 import com.example.backend.models.Activity
 import com.example.backend.models.Timetable
 import com.example.backend.payload.request.TimeTableRequest
+import com.example.backend.payload.response.TimetableResponse
 import com.example.backend.service.*
 import com.example.backend.service.user.StudentServiceImp
 import com.example.backend.service.user.TeacherServiceImp
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
@@ -33,6 +35,11 @@ class TimeTableController(
         val classRoom = classRoomService.findById(idClass)
 
         if (classRoom.isPresent) {
+
+            if (timeTableService.getByTime(timeTableRequest.time).isPresent) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("time table exist")
+            }
+
             timeTableRequest.let {
                 val timeTable = Timetable(
                         time = it.time,
@@ -50,11 +57,10 @@ class TimeTableController(
                 }
 
             }
-
             return ResponseEntity.ok("create time table successfully")
 
         } else {
-            return ResponseEntity.ok("class not found")
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("class not found")
         }
 
     }
@@ -68,16 +74,17 @@ class TimeTableController(
 
         val classRoom = student.classRoom
 
-        val timeTable = timeTableService.getByClassRoomAndTime(classRoom!!,
-                Date.from(time.atStartOfDay(ZoneId.systemDefault()).toInstant()))
+        val timeTable = timeTableService.getByClassRoomAndTime(classRoom!!, time)
 
         return if (timeTable.isPresent) {
             val activities = timeTable.get().activities
-
-            ResponseEntity.ok(activities)
+            val timetablesResponse = ArrayList<TimetableResponse>()
+            activities?.map {
+                timetablesResponse.add(TimetableResponse(it.title, it.content, it.startTime, it.endTime, it.teacher!!))
+            }
+            ResponseEntity.ok(timetablesResponse)
         } else {
-            ResponseEntity.ok("time table not found")
-
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body("time table not found")
         }
 
     }

@@ -1,9 +1,12 @@
 package com.example.backend.models
 
 import com.fasterxml.jackson.annotation.JsonBackReference
+import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotBlank
+import org.springframework.format.annotation.DateTimeFormat
 import java.sql.Time
+import java.time.LocalTime
 
 @Entity
 @Table(name = "hoat_dong")
@@ -23,10 +26,12 @@ data class Activity (
 
         @Column(name = "thoi_gian_bat_dau")
         @NotBlank
-        val startTime: Time,
+        @JsonFormat(pattern="KK:mm")
+        val startTime: LocalTime,
 
         @Column(name = "thoi_gian_ket_thuc")
-        val endTime: Time,
+        @JsonFormat(pattern="KK:mm")
+        val endTime: LocalTime,
 
         @ManyToOne
         @JoinColumn(name = "idthoi_khoa_bieu")
