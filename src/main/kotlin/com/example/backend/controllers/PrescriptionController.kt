@@ -49,24 +49,35 @@ class PrescriptionController(
             }
 
         }
-        return ResponseEntity.ok("creat prescription successfully")
+        return ResponseEntity.ok(prescriptionRequest)
     }
 
-    @GetMapping("/{idStudent}/get_by_student")
-    fun getPrescriptionByStudent(@PathVariable idStudent: String,
+    @GetMapping("/{idStudent}/get_by_student_and_time")
+    fun getPrescriptionByStudentAndTime(@PathVariable idStudent: String,
                             @RequestParam (name = "time") time: LocalDate): ResponseEntity<*> {
         val student = studentServiceImp.getUser(idStudent).get()
 
         val prescription = prescriptionService.getPrescriptionByStudent(student,
                 Date.from(time.atStartOfDay(ZoneId.systemDefault()).toInstant()))
 
-        return if (prescription != null) {
+        return if (prescription.isPresent) {
+            ResponseEntity.ok(prescription.get())
+        } else {
+            ResponseEntity.ok("nothing")
+        }
+    }
 
-            val medicines = medicineService.getMedicineByPrescription(prescription)
-            val prescriptionResponse = prescription.let {
-                PrescriptionResponse(it.pathological, startTime = it.startTime!!, endTime = it.endTime!!, medicines =  medicines!!)
+    @GetMapping("/{idStudent}/get_by_student")
+    fun getPrescriptionByStudent(@PathVariable idStudent: String): ResponseEntity<*> {
+        val student = studentServiceImp.getUser(idStudent).get()
+
+        val prescription = prescriptionService.getPrescriptionByStudent(student)
+
+        return if (prescription.isPresent) {
+            val prescriptionsResponse = prescription.get().map {
+                PrescriptionResponse(it.pathological, it.startTime!!, it.endTime!!, it.medicines!!, it.createAt)
             }
-            ResponseEntity.ok(prescriptionResponse)
+            ResponseEntity.ok(prescriptionsResponse)
         } else {
             ResponseEntity.ok("nothing")
         }
@@ -75,16 +86,15 @@ class PrescriptionController(
     fun getPrescriptionByDateAndClass(
             @PathVariable idClass: String,
             @RequestParam (name = "time") time: LocalDate): ResponseEntity<*> {
-        val classRoom = classRoomService.findById(idClass)?.get() ?: return ResponseEntity.ok("try again")
+        val classRoom = classRoomService.findById(idClass).get() ?: return ResponseEntity.ok("try again")
 
         val prescriptions = prescriptionService.getPrescriptionByDateAndClass(
                 Date.from(time.atStartOfDay(ZoneId.systemDefault()).toInstant()),
                 classRoom)
 
-        return if (prescriptions != null) {
-            val prescriptionsResponse = prescriptions.map {
-                val medicines = medicineService.getMedicineByPrescription(it)
-                PrescriptionResponse(pathological = it.pathological, startTime = it.startTime!!, endTime = it.endTime!!, medicines = medicines!!)
+        return if (prescriptions.isPresent) {
+            val prescriptionsResponse = prescriptions.get().map {
+                PrescriptionResponse(it.pathological, it.startTime!!, it.endTime!!, it.medicines!!, it.createAt)
             }
             ResponseEntity.ok(prescriptionsResponse)
         } else {

@@ -16,5 +16,7 @@ data class PrescriptionResponse(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
         var endTime: Date,
 
-        var medicines: List<Medicine>
+        var medicines: List<Medicine>,
+
+        var createAt: Long
 )

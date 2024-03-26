@@ -31,5 +31,5 @@ data class Medicine (
         @ManyToOne
         @JoinColumn(name = "iddan_thuoc")
         @JsonBackReference
-        var prescription: Prescription ? = null
+        private var prescription: Prescription ? = null
 )

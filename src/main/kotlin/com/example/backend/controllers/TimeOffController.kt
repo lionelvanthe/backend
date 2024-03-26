@@ -75,7 +75,7 @@ class TimeOffController(
                 Date.from(time.atStartOfDay(ZoneId.systemDefault()).toInstant()))
 
         return if (timeOffs.isPresent) {
-            ResponseEntity.ok(timeOffs)
+            ResponseEntity.ok(timeOffs.get())
         } else {
             ResponseEntity.ok("nothing")
         }
@@ -88,7 +88,7 @@ class TimeOffController(
         val timeOffs = timeOffService.getTimeOffByStudent(student)
 
         return if (timeOffs.isPresent) {
-            ResponseEntity.ok(timeOffs)
+            ResponseEntity.ok(timeOffs.get())
         } else {
             ResponseEntity.ok("nothing")
         }
@@ -104,7 +104,7 @@ class TimeOffController(
                 classRoom)
 
         return if (timeOffs.isPresent) {
-            ResponseEntity.ok(timeOffs)
+            ResponseEntity.ok(timeOffs.get())
         } else {
             ResponseEntity.ok("nothing")
         }

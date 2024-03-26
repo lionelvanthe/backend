@@ -39,4 +39,7 @@ data class Prescription (
         @JsonBackReference
         var  medicines: List<Medicine>? = null,
 
+        @Column(name = "thoi_gian_tao")
+        val createAt: Long = System.currentTimeMillis()
+
 )
