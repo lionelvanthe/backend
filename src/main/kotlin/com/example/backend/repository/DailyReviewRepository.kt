@@ -7,11 +7,13 @@ import com.example.backend.models.TimeOff
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
+import java.time.LocalDate
 import java.util.Date
+import java.util.Locale
 import java.util.Optional
 
 
 interface DailyReviewRepository: JpaRepository<DailyReview, Int> {
 
-    fun findByStudentAndTimeReview(student: Student, time: Date): Optional<DailyReview>
+    fun findByStudentAndTimeReview(student: Student, timeReview: LocalDate): Optional<DailyReview>
 }

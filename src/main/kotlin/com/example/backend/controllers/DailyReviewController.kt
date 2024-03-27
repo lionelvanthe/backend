@@ -5,6 +5,7 @@ import com.example.backend.payload.request.DailyReviewRequest
 import com.example.backend.service.DailyReviewService
 import com.example.backend.service.user.StudentServiceImp
 import com.example.backend.service.user.TeacherServiceImp
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
@@ -54,16 +55,15 @@ class DailyReviewController(
 
     @GetMapping("/{idStudent}/get_by_student")
     fun getDailyReviewByStudent(@PathVariable idStudent: String,
-                            @RequestParam (name = "time") time: LocalDate): ResponseEntity<*> {
+                            @RequestParam (name = "time") timeReview: LocalDate): ResponseEntity<*> {
         val student = studentServiceImp.getUser(idStudent).get()
 
-        val dailyReview = dailyReviewService.getDailyReviewByStudentAndTime(student,
-                Date.from(time.atStartOfDay(ZoneId.systemDefault()).toInstant()))
+        val dailyReview = dailyReviewService.getDailyReviewByStudentAndTime(student, timeReview)
 
         return if (dailyReview.isPresent) {
             ResponseEntity.ok(dailyReview)
         } else {
-            ResponseEntity.ok("daily review not found")
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body("daily review not found")
         }
     }
 
